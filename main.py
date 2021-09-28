@@ -1,59 +1,12 @@
-import json
 import requests
+from pprint import pprint
+import rest_wrapper
 
-from settings import token
-
-# todo: Обработка ошибок разного уровня: транспорта (легли сеть, сервер), превышение лимитов или ошибка в запросе, нужно распарсивать json
+# todo: Обработка ошибок разного уровня: транспорта (легли сеть, сервер), превышение лимитов или ошибка в запросе,
+#  нужно распарсивать json
 # todo: Ежедневная запись в БД
 # todo: Веб-приложение/ТГ-бот
 # todo: Оптимизация функций
-
-
-def get_portfolio():
-    # авторизация    - headers  - https://tinkoffcreditsystems.github.io/invest-openapi/auth/
-    # сервера апи    - api      - https://tinkoffcreditsystems.github.io/invest-openapi/env/
-    # метод Портфель - endpoint - https://tinkoffcreditsystems.github.io/invest-openapi/swagger-ui/#/portfolio
-
-    headers = {"Authorization": "Bearer %s" % token}
-    api = 'https://api-invest.tinkoff.ru/openapi/'
-    endpoint = "portfolio"
-    resp = requests.get(api + endpoint, headers=headers).json()
-
-
-    # print(json.dumps(resp, ensure_ascii=False, sort_keys=True, indent=4))
-
-    return resp
-
-
-def get_ticker_info_by_ticker(ticker):
-    headers = {"Authorization": "Bearer %s" % token}
-    api = 'https://api-invest.tinkoff.ru/openapi/'
-    endpoint = f"market/search/by-ticker?ticker={ticker}"
-    resp = requests.get(api + endpoint, headers=headers).json()
-
-    return resp
-
-
-def get_last_price_by_figi(figi, depth=1):
-    headers = {"Authorization": "Bearer %s" % token}
-    api = 'https://api-invest.tinkoff.ru/openapi/'
-    endpoint = f"market/orderbook?figi={figi}&depth={depth}"
-    resp = requests.get(api + endpoint, headers=headers).json()
-
-    return float(resp['payload']['lastPrice'])
-
-
-def get_portfolio_currency():
-    headers = {"Authorization": "Bearer %s" % token}
-    api = 'https://api-invest.tinkoff.ru/openapi/'
-    endpoint = "portfolio/currencies"
-    resp = requests.get(api + endpoint, headers=headers).json()
-
-    currency_values = dict()
-    for elem in resp["payload"]["currencies"]:
-        currency_values.update({elem['currency']: elem['balance']})
-
-    return currency_values
 
 
 def get_summary(portfolio, portfolio_currency, price_currency):
@@ -86,14 +39,14 @@ def get_summary(portfolio, portfolio_currency, price_currency):
     print(portfolio_value + portfolio_currency['RUB'])
 
 
-my_portfolio = dict(get_portfolio())["payload"]["positions"]
+if __name__ == '__main__':
+    portfolio = rest_wrapper.get_portfolio()
 
-currency_price = {'USD': get_last_price_by_figi('BBG0013HGFT4'),
-                  'EUR': get_last_price_by_figi('BBG0013HJJ31')}
+    if portfolio["status"]:
 
-get_summary(my_portfolio, get_portfolio_currency(), currency_price)
-
-
-
-
-
+        portfolio = portfolio["resp"]["payload"]["positions"]
+        currency_price = {'USD': rest_wrapper.get_last_price_by_figi('BBG0013HGFT4'),
+                          'EUR': rest_wrapper.get_last_price_by_figi('BBG0013HJJ31')}
+        get_summary(portfolio, rest_wrapper.get_portfolio_currency(), currency_price)
+    else:
+        pprint(portfolio["resp"])
