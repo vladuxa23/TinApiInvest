@@ -1,6 +1,7 @@
 import requests
 from pprint import pprint
 import rest_wrapper
+from models import *
 
 # todo: Обработка ошибок разного уровня: транспорта (легли сеть, сервер), превышение лимитов или ошибка в запросе,
 #  нужно распарсивать json
@@ -39,14 +40,16 @@ def get_summary(portfolio, portfolio_currency, price_currency):
     print(portfolio_value + portfolio_currency['RUB'])
 
 
-if __name__ == '__main__':
-    portfolio = rest_wrapper.get_portfolio()
+# if __name__ == '__main__':
 
-    if portfolio["status"]:
-
-        portfolio = portfolio["resp"]["payload"]["positions"]
-        currency_price = {'USD': rest_wrapper.get_last_price_by_figi('BBG0013HGFT4'),
-                          'EUR': rest_wrapper.get_last_price_by_figi('BBG0013HJJ31')}
-        get_summary(portfolio, rest_wrapper.get_portfolio_currency(), currency_price)
-    else:
-        pprint(portfolio["resp"])
+    #
+    # portfolio = rest_wrapper.get_portfolio()
+    #
+    # if portfolio["status"]:
+    #
+    #     portfolio = portfolio["resp"]["payload"]["positions"]
+    #     currency_price = {'USD': rest_wrapper.get_last_price_by_figi('BBG0013HGFT4'),
+    #                       'EUR': rest_wrapper.get_last_price_by_figi('BBG0013HJJ31')}
+    #     get_summary(portfolio, rest_wrapper.get_portfolio_currency(), currency_price)
+    # else:
+    #     pprint(portfolio["resp"])
