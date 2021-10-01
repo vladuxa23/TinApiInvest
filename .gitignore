@@ -2,7 +2,7 @@
 # My_files
 settings.py
 .idea
-capital.db
+app/capital.db
 # Byte-compiled / optimized / DLL files / PyCharm
 __pycache__/
 *.py[cod]
