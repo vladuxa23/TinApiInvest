@@ -2,6 +2,7 @@ import json
 import traceback
 import requests
 from settings import token
+from bs4 import BeautifulSoup
 
 
 def get_portfolio():
@@ -58,3 +59,8 @@ def get_portfolio_currency():
         currency_values.update({elem['currency']: elem['balance']})
 
     return currency_values
+
+
+def get_ticker_image_link(ticker):
+    url = f"https://www.tinkoff.ru/invest/stocks/{ticker}/"
+    return None
