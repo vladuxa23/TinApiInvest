@@ -3,35 +3,28 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-
 <div class="container">
-	<div class="cards">
-      {% for key in content %}
-		<div class="card">
-			<span class="card-header" style="background-image: url(http://placeimg.com/400/200/animals);">
-				<span class="card-title">
-					<h3>{{ key }}</h3>
-				</span>
-			</span>
+<div class="row row-cols-2 row-cols-lg-6 g-2">
+	{% for key in content %}
+	<div class="col">
+		<div class="card h-100">
+			<img src="https://invest-brands.cdn-tinkoff.ru/RU0004887991x640.png" class="card-img-top" alt="...">
+			<div class="card-body">
+				<h5 class="card-title">{{ key }}</h5>
+				{% if "total_portfolio_cost" not in key %}
+				<p>Всего: {{ content[key]["value"] }}</p>
+				<p>Стоимость: {{ content[key]["total_cost"] }} {{ content[key]["total_cost_currency"] }}</p>
+				<p>Динамика: {{ content[key]["current_dynamic_price"] }} {{ content[key]["current_dynamic_currency"] }}</p>
+				{% else %}
+				<p>Стоимость портфеля: {{ content[key] }}</p>
+				{% endif %}
 
-			<span class="card-summary">
-              {% if "total_portfolio_cost" not in key %}
-              <p>Всего: {{ content[key]["value"] }}</p>
-              <p>Стоимость: {{ content[key]["total_cost"] }} {{ content[key]["total_cost_currency"] }}</p>
-              <p>Динамика: {{ content[key]["current_dynamic_price"] }} {{ content[key]["current_dynamic_currency"] }}</p>
-              {% else %}
-              <p>Стоимость портфеля: {{ content[key] }}</p>
-              {% endif %}
-			</span>
-
-			<span class="card-meta">
-				Published: June 18th, 2015
-			</span>
+			</div>
 		</div>
-      {% endfor %}
 	</div>
+	{% endfor %}
 </div>
-
+	</div>
 
 {% endblock %}
 
