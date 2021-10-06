@@ -1,0 +1,12 @@
+.card:hover {
+    -webkit-box-shadow: 0px 0px 14px 0px rgba(0, 142, 251, 1);
+    -moz-box-shadow: 0px 0px 14px 0px rgba(0, 142, 251, 1);
+    box-shadow: 0px 0px 14px 0px rgba(0, 142, 251, 1);
+}
+
+.img-fluid {
+    border-radius: 50%;  /* Скругление углов изображения */
+    border: 5px solid #fff; /* Цвет и ширину рамки */
+    box-shadow: 2px 1px 5px #999999; /* Цвет и размер тени */
+    max-width: 120px;
+}

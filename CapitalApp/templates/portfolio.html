@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/portfolio.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+	<h1>Стоимость портфеля: {{content["total_portfolio_cost"]}} рубля</h1>
+	<div class="row row-cols-2 row-cols-lg-5 g-4">
+		{% for key in content %}
+		{% if "total_portfolio_cost" not in key %}
+		<div class="col">
+			<div class="card bg-light h-100">
+
+				<div class="card-header d-flex align-items-center justify-content-center text-white bg-primary h-100">
+					<h5 class="my-0 justify-content-center">{{ key }}</h5>
+				</div>
+
+				<div class="card-image d-flex align-items-center justify-content-center">
+					<img class="img-fluid "
+						 src="{{ url_for('static', filename=content[key]['ticker_img']) }}"
+						 alt="..." onerror="if (this.src !== 'error.jpg') this.src = 'static/img/card_no_image.jpg';">
+				</div>
+
+				<div class="card-body">
+					<p>Всего: {{ content[key]["value"] }}</p>
+					<p>Стоимость: {{ content[key]["total_cost"] }} {{ content[key]["total_cost_currency"] }}</p>
+					<p>Динамика: {{ content[key]["current_dynamic_price"] }} {{ content[key]["current_dynamic_currency"] }}</p>
+				</div>
+
+			</div>
+		</div>
+		{% endif %}
+		{% endfor %}
+	</div>
+</div>
+
+{% endblock %}
+
+
+
+
