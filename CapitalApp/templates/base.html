@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
-<!--    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">-->
+    {% block style %}{% endblock %}
 </head>
 <body>
 
@@ -16,10 +16,10 @@
         </a>
 
         <ul class="nav nav-pills">
-            <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Home</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">Features</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">Pricing</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">FAQs</a></li>
+            <li class="nav-item"><a href="/" class="nav-link active" aria-current="page">Главная</a></li>
+            <li class="nav-item"><a href="#" class="nav-link">Финансы</a></li>
+            <li class="nav-item"><a href="/stock-portfolio" class="nav-link">Портфель</a></li>
+            <li class="nav-item"><a href="#" class="nav-link">...</a></li>
             <li class="nav-item"><a href="#" class="nav-link">About</a></li>
         </ul>
     </header>

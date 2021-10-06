@@ -1,8 +1,13 @@
 import json
+import os
 import traceback
+
 import requests
-from settings import token
 from bs4 import BeautifulSoup
+
+from settings import token
+from .models import TickerImage
+from . import db
 
 
 def get_portfolio():
@@ -61,6 +66,33 @@ def get_portfolio_currency():
     return currency_values
 
 
-def get_ticker_image_link(ticker):
-    url = f"https://www.tinkoff.ru/invest/stocks/{ticker}/"
-    return None
+def get_ticker_image_link_online(instr: str, ticker: str) -> str:
+    instr = instr.lower()
+    ticker = ticker.lower()
+    null_image = 'img/card_no_image.jpg'
+    ticker_logo = f'img/{ticker}_logo_img.jpg'
+
+    img_path = os.path.join('CapitalApp', 'static', 'img', f'{ticker}_logo_img.jpg')
+    if os.path.exists(img_path):
+        return ticker_logo  # не возвращаем полный путь т.к. в HTML url_for
+
+    url = f"https://www.tinkoff.ru/invest/{instr}s/{ticker}/"
+    data = requests.get(url)
+    if data.status_code == 200:
+        parser = BeautifulSoup(data.text, "html.parser")
+        all_img = str(parser.findAll('div', class_='InvestLogo__root_2xvQS InvestLogo__root_size_xl_3AVii'))
+        if len(all_img) > 10:  # защита если ссылка на изображение не найдена '[]'
+
+            img_link = 'https:' + all_img.split('(')[1].split(')')[0]
+            img = requests.get(img_link)
+            with open(img_path, 'wb') as f:
+                f.write(img.content)
+
+            ticker_image = TickerImage(ticker, ticker_logo)
+            db.session.add(ticker_image)
+            db.session.commit()
+
+            return ticker_logo  # возвращаем все равно короткий путь т.к. в шаблоне url_for
+        return null_image
+    else:
+        return null_image

@@ -1,6 +1,6 @@
 import requests
 from pprint import pprint
-import app.rest_wrapper
+from CapitalApp.rest_wrapper import get_ticker_image_link_online
 
 # todo: Обработка ошибок разного уровня: транспорта (легли сеть, сервер), превышение лимитов или ошибка в запросе,
 #  нужно распарсивать json
@@ -20,6 +20,7 @@ def get_summary(portfolio, portfolio_currency, price_currency):
         current_dynamic_price = tick['expectedYield']['value']
         current_dynamic_currency = tick['expectedYield']['currency']
         current_all_price = float(balance) * float(one_lot_price) + current_dynamic_price
+        ticker_img = get_ticker_image_link_online(tick['instrumentType'], tick['ticker'])
 
         if one_lot_currency != 'RUB':
             current_all_price = current_all_price * price_currency[one_lot_currency]
@@ -28,16 +29,12 @@ def get_summary(portfolio, portfolio_currency, price_currency):
                                                "total_cost": round(current_all_price, 2), # Подсчёт всего!!!
                                                "total_cost_currency": one_lot_currency,
                                                "current_dynamic_price": round(current_dynamic_price, 2), #
-                                               "current_dynamic_currency": current_dynamic_currency}})
-        # print(f"{position_name}")
-        # print(f"Всего:             {balance} лотов")
-        # print(f"Общая цена:        {current_all_price} {one_lot_currency}")
-        # print(f"С момента покупки: {current_dynamic_price} {current_dynamic_currency}")
-
+                                               "current_dynamic_currency": current_dynamic_currency,
+                                               "ticker_img": ticker_img}})
 
         portfolio_value += current_all_price
 
-    portfolio_dict.update({"total_portfolio_cost": portfolio_value})
+    portfolio_dict.update({"total_portfolio_cost": round(portfolio_value, 2)})
 
     return portfolio_dict
 

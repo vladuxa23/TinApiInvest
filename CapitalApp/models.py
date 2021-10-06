@@ -1,5 +1,5 @@
 from datetime import datetime
-from app import db
+from CapitalApp import db
 
 
 class Portfolio(db.Model):
@@ -45,3 +45,17 @@ class InstrumentInfo(db.Model):
 
     def __repr__(self):
         return f"InstrumentInfo<name={self.name}, balance={self.balance}>"
+
+
+class TickerImage(db.Model):
+    __tablename__ = "ticker_image"
+    id = db.Column(db.Integer, primary_key=True)
+    ticker = db.Column(db.String)
+    imagelink = db.Column(db.String(255))
+
+    def __init__(self, ticker: str, imagelink: str):
+        self.ticker = ticker
+        self.imagelink = imagelink
+
+    def __repr__(self):
+        return f"Ticker {self.ticker} image {self.imagelink}"
