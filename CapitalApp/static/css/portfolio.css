@@ -10,3 +10,11 @@
     box-shadow: 2px 1px 5px #999999; /* Цвет и размер тени */
     max-width: 120px;
 }
+
+.nav-item {
+    border-bottom: 3px solid #fff3;
+}
+
+.nav-item:hover {
+  border-bottom-color: #fff9;
+}

@@ -6,8 +6,8 @@ import requests
 from bs4 import BeautifulSoup
 
 from settings import token
-from .models import TickerImage
 from . import db
+from .models import TickerImage
 
 
 def get_portfolio():
@@ -85,10 +85,11 @@ def get_ticker_image_link_online(instr: str, ticker: str) -> str:
 
             img_link = 'https:' + all_img.split('(')[1].split(')')[0]
             img = requests.get(img_link)
+            # add_ticker_image_blob_to_db(img_link, ticker, img.content)
             with open(img_path, 'wb') as f:
                 f.write(img.content)
 
-            ticker_image = TickerImage(ticker, ticker_logo)
+            ticker_image = TickerImage(ticker, img_link, img.content)
             db.session.add(ticker_image)
             db.session.commit()
 
@@ -96,3 +97,17 @@ def get_ticker_image_link_online(instr: str, ticker: str) -> str:
         return null_image
     else:
         return null_image
+
+
+def add_ticker_image_blob_to_db(image_link, ticker, image):
+    # id = db.Column(db.Integer, primary_key=True)
+    # ticker = db.Column(db.String)
+    # imagelink = db.Column(db.String(255))
+    # image = db.Column(db.BLOB)
+    #
+    # ticker_image = TickerImage(ticker=ticker, imagelink=image_link, image=image)
+    # db.session.add(ticker_image)
+    # db.session.commit()
+    pass
+
+

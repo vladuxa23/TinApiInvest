@@ -1,4 +1,5 @@
 from datetime import datetime
+
 from CapitalApp import db
 
 
@@ -52,10 +53,12 @@ class TickerImage(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     ticker = db.Column(db.String)
     imagelink = db.Column(db.String(255))
+    image = db.Column(db.BLOB)
 
-    def __init__(self, ticker: str, imagelink: str):
+    def __init__(self, ticker: str, imagelink: str, image):
         self.ticker = ticker
         self.imagelink = imagelink
+        self.image = image
 
     def __repr__(self):
         return f"Ticker {self.ticker} image {self.imagelink}"
