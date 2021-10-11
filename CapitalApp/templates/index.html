@@ -3,11 +3,22 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 {% endblock %}
 
 {% block content %}
+
 <div class="container">
-    <h1>Приложение для анализа финансовых активов</h1>
+    <video autoplay muted loop id="myVideo" class="rounded mx-auto d-block w-100">
+        <source src="{{ url_for('static', filename='video/background_main_video.mp4') }}" type="video/mp4">
+    </video>
+    <p></p>
+    <div class="d-grid gap-2 col-6 mx-auto">
+        <a href="/summary" class="btn btn-primary">Перейти к обзору</a>
+
+    </div>
+
+
 </div>
 {% endblock %}
 
