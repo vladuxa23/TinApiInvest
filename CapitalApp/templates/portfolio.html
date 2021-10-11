@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+<!--TODO: rename content to portfolio_summary-->
 {% block title %}{{ title }}{% endblock %}
 
 {% block style %}
@@ -8,10 +8,16 @@
 
 {% block content %}
 <div class="container">
-	<h1>Стоимость портфеля: {{content["total_portfolio_cost"]}} рубля</h1>
+	<h1 class="mb-5">Стоимость портфеля: {{content["total_portfolio_cost"]}} рубля</h1>
+
+	{% for stock in content %}
+
+	{% if "total_portfolio_cost" not in stock %}
+	<h1 class="m-5">{{ instrument_type[stock] }}</h1>
 	<div class="row row-cols-2 row-cols-lg-5 g-4">
-		{% for key in content %}
-		{% if "total_portfolio_cost" not in key %}
+
+		{% for key in content[stock] %}
+
 		<div class="col">
 			<div class="card bg-light h-100">
 
@@ -20,24 +26,31 @@
 				</div>
 
 				<div class="card-image d-flex align-items-center justify-content-center">
-					<img class="img-fluid "
-						 src="{{ url_for('static', filename=content[key]['ticker_img']) }}"
+					<img class="img-fluid mt-3"
+						 src="{{ url_for('static', filename=content[stock][key]['ticker_img']) }}"
 						 alt="..." onerror="if (this.src !== 'error.jpg') this.src = 'static/img/card_no_image.jpg';">
 				</div>
 
 				<div class="card-body">
-					<p>Всего: {{ content[key]["value"] }}</p>
-					<p>Стоимость: {{ content[key]["total_cost"] }} {{ content[key]["total_cost_currency"] }}</p>
-					<p>Динамика: {{ content[key]["current_dynamic_price"] }} {{ content[key]["current_dynamic_currency"] }}</p>
+					<p>Всего: {{ content[stock][key]["value"] }}</p>
+					<p>Стоимость: {{ content[stock][key]["total_cost"] }} {{ content[stock][key]["total_cost_currency"] }}</p>
+					<p>Динамика: {{ content[stock][key]["current_dynamic_price"] }} {{ content[stock][key]["current_dynamic_currency"] }}</p>
 				</div>
 
 			</div>
 		</div>
-		{% endif %}
-		{% endfor %}
-	</div>
-</div>
 
+
+		{% endfor %}
+	{% endif %}
+
+	</div>
+	{% endfor %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!--<script src="{{ url_for('static', filename='js/portfolio.js') }}"></script>-->
 {% endblock %}
 
 
