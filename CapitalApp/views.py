@@ -27,7 +27,9 @@ def stock_portfolio():
         portfolio = portfolio["resp"]["payload"]["positions"]
         currency_price = {'USD': CapitalApp.rest_wrapper.get_last_price_by_figi('BBG0013HGFT4'),
                           'EUR': CapitalApp.rest_wrapper.get_last_price_by_figi('BBG0013HJJ31')}
-        portfolio_summary = get_summary(portfolio, CapitalApp.rest_wrapper.get_portfolio_currency(), currency_price)
+        portfolio_summary = get_summary(portfolio, currency_price)
+
+        update_portfolio_data_in_db(portfolio)
 
         return render_template('portfolio.html', title='Инвестиции',
                                content=portfolio_summary, instrument_type=INSTRUMENT_TYPE)
