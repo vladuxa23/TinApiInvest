@@ -3,6 +3,24 @@ from datetime import datetime
 from CapitalApp import db
 
 
+def get_currency_id(currency_dict):
+    if Currency.query.filter_by(currency=currency_dict['currency']).first() is None:
+        db.session.add(Currency(currency_dict['currency']))
+        db.session.commit()
+
+    return Currency.query.filter_by(currency=currency_dict['currency']).first().id
+
+
+def get_instrument_type_id(instrument_dict):
+    if InstrumentInfo.query.filter_by(ticker=instrument_dict.get('ticker')).first() is None:
+        # Если не существует, добавляем его
+        db.session.add(InstrumentInfo(**instrument_dict))
+        # Сохраняем состояние БД
+        db.session.commit()
+        # Возвращаем кортеж со временем добавления
+    return InstrumentInfo.query.filter_by(ticker=instrument_dict.get('ticker')).first().id
+
+
 class Portfolio(db.Model):
     __tablename__ = "portfolio"
     id = db.Column(db.Integer, primary_key=True)
@@ -11,25 +29,37 @@ class Portfolio(db.Model):
     expected_yield_value = db.Column(db.Float)
     average_position_price_value = db.Column(db.Float)
 
-    instrument_id = db.Column(db.Integer, db.ForeignKey('instrument_info.id'))
-    expected_yield_currency_id = db.Column(db.Integer, db.ForeignKey("currency.id"))
-    average_position_price_currency_id = db.Column(db.Integer, db.ForeignKey("currency.id"))
-
-    # instrument = db.relationship('InstrumentInfo', backref=db.backref('1', lazy=True))
-    # expected_yield_currency = db.relationship('Currency', backref=db.backref('2', lazy=True))
-    # average_position_price_currency = db.relationship('Currency', backref=db.backref('3', lazy=True))
+    instrument_id = db.Column(db.Integer,
+                              db.ForeignKey('instrument_info.id'))
+    expected_yield_currency_id = db.Column(db.Integer,
+                                           db.ForeignKey("currency.id"))
+    average_position_price_currency_id = db.Column(db.Integer,
+                                                   db.ForeignKey("currency.id"))
 
     date = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
-        return f"Portfolio<averagePositionPriceValue={self.averagePositionPriceValue}, " \
-               f"averagePositionPriceCurrency={self.averagePositionPriceCurrency})>"
+        return f"Portfolio<averagePositionPriceValue={self.average_position_price_value}, " \
+               f"averagePositionPriceCurrencyID={self.average_position_price_currency_id})>"
+
+    def __init__(self, **kwargs):
+        self.balance = kwargs.get('balance')
+        self.lots = kwargs.get('lots')
+
+        self.expected_yield_value = kwargs.get('expectedYield').get('value')
+        self.average_position_price_value = kwargs.get('averagePositionPrice').get('value')
+        self.instrument_id = get_instrument_type_id(kwargs)
+        self.expected_yield_currency_id = get_currency_id(kwargs.get('expectedYield'))
+        self.average_position_price_currency_id = get_currency_id(kwargs.get('averagePositionPrice'))
 
 
 class Currency(db.Model):
     __tablename__ = "currency"
     id = db.Column(db.Integer, primary_key=True)
     currency = db.Column(db.String(10), unique=True)
+
+    def __init__(self, currency):
+        self.currency = currency
 
     def __repr__(self):
         return f"Currency<({self.currency})>"
@@ -45,7 +75,14 @@ class InstrumentInfo(db.Model):
     name = db.Column(db.String(200), unique=True)
 
     def __repr__(self):
-        return f"InstrumentInfo<name={self.name}, balance={self.balance}>"
+        return f"InstrumentInfo<name={self.name}>"
+
+    def __init__(self, **kwargs):
+        self.figi = kwargs.get('figi')
+        self.ticker = kwargs.get('ticker')
+        self.isin = kwargs.get('isin')
+        self.instrument_type = kwargs.get('instrumentType')
+        self.name = kwargs.get('name')
 
 
 class TickerImage(db.Model):
