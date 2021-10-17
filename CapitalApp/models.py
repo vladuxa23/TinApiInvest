@@ -3,11 +3,23 @@ from datetime import datetime
 from CapitalApp import db
 
 
-def get_currency_id(currency_dict):
+def get_currency_id(currency_dict: dict) -> int:
+    """
+    Функция возвращает id валюты в БД, получая данные из словаря
+
+    :param currency_dict: словарь содержащий информацио о валюте портфеля
+    :type currency_dict: dict
+
+    :rtype: int
+    :return: int currency id in database
+    """
+
+    # Если нет данных о валюте в бд
     if Currency.query.filter_by(currency=currency_dict['currency']).first() is None:
+        # то добавляем их
         db.session.add(Currency(currency_dict['currency']))
         db.session.commit()
-
+    # И возвращаем id
     return Currency.query.filter_by(currency=currency_dict['currency']).first().id
 
 
