@@ -5,6 +5,7 @@ from flask import render_template
 
 import CapitalApp.rest_wrapper
 from CapitalApp import flask_app, db
+from CapitalApp.forms import NewCreditForm
 from CapitalApp.handlers import *
 
 INSTRUMENT_TYPE = {"stock": "Акции", "bond": "Облигации", "etf": "Фонды", "currency": "Валюта"}
@@ -61,4 +62,5 @@ def summary_page():
 
 @flask_app.route('/credits')
 def credits_page():
-    return render_template('credits.html', title='Сводка')
+    credit_form = NewCreditForm()
+    return render_template('credits.html', title='Кредиты', credit_form=credit_form)

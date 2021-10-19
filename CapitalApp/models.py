@@ -111,3 +111,32 @@ class TickerImage(db.Model):
 
     def __repr__(self):
         return f"Ticker {self.ticker} image {self.imagelink}"
+
+
+class Credits(db.Model):
+    __tablename__ = 'credits'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255))
+    date_start = db.Column(db.Date)
+    total_month = db.Column(db.Integer)
+    percent = db.Column(db.Float)
+    amount = db.Column(db.Float)
+    amount_value = db.Column(db.Integer, db.ForeignKey("currency.id"))
+
+    def __init__(self, **kwargs):
+        self.name = kwargs.get('name')
+        self.date_start = kwargs.get('date_start')
+        self.total_month = kwargs.get('total_month')
+        self.percent = kwargs.get('percent')
+        self.amount = kwargs.get('amount')
+        self.amount_value = kwargs.get('amount_value')
+
+    def __repr__(self):
+        return f'Name {self.name}'
+
+
+
+
+
+
+
