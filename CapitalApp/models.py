@@ -125,10 +125,10 @@ class Credits(db.Model):
 
     def __init__(self, **kwargs):
         self.name = kwargs.get('name')
-        self.date_start = kwargs.get('date_start')
-        self.total_month = kwargs.get('total_month')
-        self.percent = kwargs.get('percent')
-        self.amount = kwargs.get('amount')
+        self.date_start = datetime.strptime(kwargs.get('date_start'), '%d.%m.%Y')
+        self.total_month = int(kwargs.get('total_month'))
+        self.percent = float(kwargs.get('percent'))
+        self.amount = float(kwargs.get('amount'))
         self.amount_value = kwargs.get('amount_value')
 
     def __repr__(self):

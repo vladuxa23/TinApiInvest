@@ -1,7 +1,7 @@
 import json
 import os
 
-from flask import render_template
+from flask import render_template, request, jsonify
 
 import CapitalApp.rest_wrapper
 from CapitalApp import flask_app, db
@@ -64,3 +64,29 @@ def summary_page():
 def credits_page():
     credit_form = NewCreditForm()
     return render_template('credits.html', title='Кредиты', credit_form=credit_form)
+
+
+@flask_app.route('/add-credit', methods=['POST'])
+def add_credit():
+    # name = request.form['name']
+    # date_start = request.form['date_start']
+    # total_month = request.form['total_month']
+    # percent = request.form['percent']
+    # amount = request.form['amount']
+    # amount_value = request.form['amount_value']
+
+    try:
+        db.session.add(Credits(**request.form))
+        db.session.commit()
+        return jsonify({'result': 'Ok'})
+    except:
+        #  TODO: do something
+        return jsonify({'error': 'except'})
+
+
+
+
+
+
+
+

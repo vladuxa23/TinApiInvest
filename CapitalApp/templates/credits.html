@@ -3,32 +3,33 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block style %}
-<!--<link rel="stylesheet" href="{{ url_for('static', filename='css/credits.css') }}">-->
+
 {% endblock %}
 
 {% block content %}
 
 <div class="container">
-   <h1>Кредиты</h1>
+   <h1>Ваши кредиты</h1>
 
    <div>
+      <div class="alert" id="result-alert" role="alert" style="display: none">
+         <p id="result-text">Текст</p>
+      </div>
+
       <h3>Кредиты отсутствуют</h3>
 
-      <h6>Список кредитов</h6>
 
-      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-         Добавить кредит
-      </button>
+
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#openModal">Добавить кредит</button>
    </div>
 
-   <!--   -->
 
 
-   <!-- Button trigger modal -->
+
 
 
    <!-- Modal -->
-   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="addCreditLabel" aria-hidden="true">
+   <div class="modal fade" id="openModal" tabindex="-1" aria-labelledby="addCreditLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
          <div class="modal-content">
             <!-- Popup header -->
@@ -46,9 +47,9 @@
                      {{field.label(class="form-label", for=field.name)}}
                      {% if  field.name == 'submit' %}
                      <div class="d-grid gap-2">
-                     {{field(class="btn btn-primary", value="Добавить")}}
-                        </div>
-                     {% elif field.name == 'amount'  %}
+                        {{field(class="btn btn-primary", value="Добавить")}}
+                     </div>
+                     {% elif field.name == 'amount_value'  %}
                      {{field(class="form-select")}}
                      {% else %}
                      {{field(class="form-control")}}
@@ -75,11 +76,11 @@
    </div>
 </div>
 
-   {% endblock %}
+{% endblock %}
 
-<!--   {% block scripts %}-->
-<!--   <script src="{{ url_for('static', filename='js/credits.js') }}"></script>-->
-<!--   {% endblock %}-->
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/credits.js') }}"></script>
+{% endblock %}
 
 
 

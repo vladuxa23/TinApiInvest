@@ -8,5 +8,6 @@ class NewCreditForm(FlaskForm):
     date_start = DateField("Дата выдачи:", validators=[DataRequired()])
     total_month = IntegerField("Срок кредита, мес:", validators=[DataRequired()])
     percent = FloatField("Процент", validators=[DataRequired()])
-    amount = SelectField('Валюта', choices=[('RUB', 'RUB'), ('USD', 'USD'), ('EUR', 'EUR')], validators=[DataRequired()])
+    amount = FloatField("Сумма кредита", validators=[DataRequired()])
+    amount_value = SelectField('Валюта', choices=[('RUB', 'RUB'), ('USD', 'USD'), ('EUR', 'EUR')], validators=[DataRequired()])
     submit = SubmitField("")
