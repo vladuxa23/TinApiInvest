@@ -94,3 +94,13 @@ def get_summary(portfolio: list, price_currency: dict) -> dict:
     portfolio_dict.update({"total_portfolio_cost": round(portfolio_value, 2)})
 
     return portfolio_dict
+
+
+def get_credit_monthly_payment(amount, percent, month):
+    month_percent = percent/(100*12)
+
+    return amount * (month_percent/(1-pow((1+month_percent), -month)))
+
+
+if __name__ == '__main__':
+    print(get_credit_monthly_payment())

@@ -1,5 +1,6 @@
 import json
 import os
+import traceback
 
 from flask import render_template, request, jsonify
 
@@ -61,9 +62,11 @@ def summary_page():
 
 
 @flask_app.route('/credits')
-def credits_page():
+def credits():
+    credits_list = db.session.query(Credits).all()
+
     credit_form = NewCreditForm()
-    return render_template('credits.html', title='Кредиты', credit_form=credit_form)
+    return render_template('credits.html', title='Кредиты', credit_form=credit_form, credits_list=credits_list)
 
 
 @flask_app.route('/add-credit', methods=['POST'])
@@ -79,9 +82,10 @@ def add_credit():
         db.session.add(Credits(**request.form))
         db.session.commit()
         return jsonify({'result': 'Ok'})
-    except:
+    except Exception as err:
         #  TODO: do something
-        return jsonify({'error': 'except'})
+        print(err)
+        return jsonify({'error': err})
 
 
 

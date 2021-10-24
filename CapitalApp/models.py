@@ -73,9 +73,6 @@ class Currency(db.Model):
     def __init__(self, currency):
         self.currency = currency
 
-    def __repr__(self):
-        return f"Currency<({self.currency})>"
-
 
 class InstrumentInfo(db.Model):
     __tablename__ = "instrument_info"
@@ -85,9 +82,6 @@ class InstrumentInfo(db.Model):
     isin = db.Column(db.String(20))
     instrument_type = db.Column(db.String(20))
     name = db.Column(db.String(200), unique=True)
-
-    def __repr__(self):
-        return f"InstrumentInfo<name={self.name}>"
 
     def __init__(self, **kwargs):
         self.figi = kwargs.get('figi')
@@ -109,9 +103,6 @@ class TickerImage(db.Model):
         self.imagelink = imagelink
         self.image = image
 
-    def __repr__(self):
-        return f"Ticker {self.ticker} image {self.imagelink}"
-
 
 class Credits(db.Model):
     __tablename__ = 'credits'
@@ -130,13 +121,3 @@ class Credits(db.Model):
         self.percent = float(kwargs.get('percent'))
         self.amount = float(kwargs.get('amount'))
         self.amount_value = kwargs.get('amount_value')
-
-    def __repr__(self):
-        return f'Name {self.name}'
-
-
-
-
-
-
-

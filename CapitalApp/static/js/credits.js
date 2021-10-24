@@ -31,3 +31,25 @@ $(document).ready(function(){
 
     });
 });
+
+$('#date_start').datepicker({
+    format: "dd.mm.yyyy",
+    weekStart: 0,
+    clearBtn: true,
+    language: "ru",
+    autoclose: true,
+    todayHighlight: true
+});
+
+$(document).on('keydown', 'input[pattern]', function(e){
+  var input = $(this);
+  var oldVal = input.val();
+  var regex = new RegExp(input.attr('pattern'), 'g');
+
+  setTimeout(function(){
+    var newVal = input.val();
+    if(!regex.test(newVal)){
+      input.val(oldVal);
+    }
+  }, 1);
+});
