@@ -9,17 +9,64 @@
 {% block content %}
 
 <div class="container">
-    <video autoplay muted loop id="myVideo" class="rounded mx-auto d-block w-100">
-        <source src="{{ url_for('static', filename='video/background_main_video.mp4') }}" type="video/mp4">
-    </video>
-    <p></p>
-    <div class="d-grid gap-2 col-6 mx-auto">
-        <a href="/summary" class="btn btn-primary">Перейти к обзору</a>
 
+    <div class="card bg-dark">
+        <video autoplay muted loop id="v" class="rounded mx-auto d-block w-100">
+            <source src="{{ url_for('static', filename='video/background_main_video.mp4') }}" type="video/mp4">
+        </video>
+
+        <div class="card-img-overlay">
+
+            <div class="row m-5">
+                <div class="card col m-5">
+                    <img src="..." class="card-img-top" alt="Общая финансовая картинка">
+                    <div class="card-body">
+                        <h5 class="card-title">Сводка</h5>
+                        <p class="card-text">Расчёты сколько всего деняк</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row m-5">
+
+                <div class="card col m-5">
+                    <img src="..." class="card-img-top" alt="Картинка с вкладом">
+                    <div class="card-body">
+                        <h5 class="card-title">Вклады</h5>
+                        <p class="card-text">Инфа по вкладам</p>
+                        <a href="\deposits" class="btn btn-primary">Перейти</a>
+                    </div>
+                </div>
+
+                <div class="card col m-5">
+                    <img src="..." class="card-img-top" alt="Картинка с кредитом">
+                    <div class="card-body">
+                        <h5 class="card-title">Кредиты</h5>
+                        <p class="card-text">Инфа по кредитам</p>
+                        <a href="\credits" class="btn btn-primary">Перейти</a>
+                    </div>
+                </div>
+
+                <div class="card col m-5">
+                    <img src="..." class="card-img-top" alt="Картинка с инвестициями">
+                    <div class="card-body">
+                        <h5 class="card-title">Инвестиции</h5>
+                        <p class="card-text">Инфа по инвестициям</p>
+                        <a href="\stock-portfolio" class="btn btn-primary">Перейти</a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
     </div>
 
 
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
 {% endblock %}
 
 
