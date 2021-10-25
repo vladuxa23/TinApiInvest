@@ -13,4 +13,8 @@ Token is used only in this script and don't send anywhere.
 1. set FLASK_APP=manage.py
 2. flask db init
 3. flask db migrate
+   if not migrate
+   3. flask db stamp head
+   4. flask db migrate
+   5. flask db upgrade
 4. flask db upgrade
