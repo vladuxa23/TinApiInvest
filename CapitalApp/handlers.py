@@ -1,6 +1,7 @@
-from .rest_wrapper import get_ticker_image_link_online, get_portfolio_currency
-from .models import *
 import datetime
+
+from .models import *
+from .rest_wrapper import get_ticker_image_link_online, get_portfolio_currency
 
 
 # todo: Обработка ошибок разного уровня: транспорта (легли сеть, сервер),
@@ -32,7 +33,7 @@ def update_portfolio_data_in_db(portfolio: list) -> tuple:
     db.session.commit()
 
     return True, f'Данные успешно обновлены в ' \
-                 f'{datetime.datetime.utcnow().isoformat()}'
+                 f'{datetime.utcnow().isoformat()}'
 
 
 def get_summary(portfolio: list, price_currency: dict) -> dict:

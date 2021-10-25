@@ -11,9 +11,12 @@ from .models import TickerImage
 
 
 def get_portfolio():
-    # авторизация    - headers  - https://tinkoffcreditsystems.github.io/invest-openapi/auth/
-    # сервера апи    - api      - https://tinkoffcreditsystems.github.io/invest-openapi/env/
-    # метод Портфель - endpoint - https://tinkoffcreditsystems.github.io/invest-openapi/swagger-ui/#/portfolio
+    # авторизация    - headers  -
+    # https://tinkoffcreditsystems.github.io/invest-openapi/auth/
+    # сервера апи    - api      -
+    # https://tinkoffcreditsystems.github.io/invest-openapi/env/
+    # метод Портфель - endpoint -
+    # https://tinkoffcreditsystems.github.io/invest-openapi/swagger-ui/#/portfolio
 
     headers = {f"Authorization": f"Bearer {token}"}
     api = 'https://api-invest.tinkoff.ru/openapi/'
@@ -72,7 +75,8 @@ def get_ticker_image_link_online(instr: str, ticker: str) -> str:
     null_image = 'img/card_no_image.jpg'
     ticker_logo = f'img/{ticker}_logo_img.jpg'
 
-    img_path = os.path.join('CapitalApp', 'static', 'img', f'{ticker}_logo_img.jpg')
+    img_path = os.path.join('CapitalApp', 'static', 'img',
+                            f'{ticker}_logo_img.jpg')
     if os.path.exists(img_path):
         return ticker_logo  # не возвращаем полный путь т.к. в HTML url_for
 
@@ -80,7 +84,8 @@ def get_ticker_image_link_online(instr: str, ticker: str) -> str:
     data = requests.get(url)
     if data.status_code == 200:
         parser = BeautifulSoup(data.text, "html.parser")
-        all_img = str(parser.findAll('div', class_='InvestLogo__root_2xvQS InvestLogo__root_size_xl_3AVii'))
+        all_img = str(parser.findAll('div',
+                                     class_='InvestLogo__root_2xvQS InvestLogo__root_size_xl_3AVii'))
         if len(all_img) > 10:  # защита если ссылка на изображение не найдена '[]'
 
             img_link = 'https:' + all_img.split('(')[1].split(')')[0]
@@ -93,7 +98,8 @@ def get_ticker_image_link_online(instr: str, ticker: str) -> str:
             db.session.add(ticker_image)
             db.session.commit()
 
-            return ticker_logo  # возвращаем все равно короткий путь т.к. в шаблоне url_for
+            return ticker_logo  # возвращаем все равно короткий путь т.к. в
+            #  шаблоне url_for
         return null_image
     else:
         return null_image
@@ -105,9 +111,8 @@ def add_ticker_image_blob_to_db(image_link, ticker, image):
     # imagelink = db.Column(db.String(255))
     # image = db.Column(db.BLOB)
     #
-    # ticker_image = TickerImage(ticker=ticker, imagelink=image_link, image=image)
+    # ticker_image = TickerImage(ticker=ticker, imagelink=image_link,
+    #                                           image=image)
     # db.session.add(ticker_image)
     # db.session.commit()
     pass
-
-

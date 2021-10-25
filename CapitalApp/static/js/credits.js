@@ -15,13 +15,16 @@ $(document).ready(function(){
             var alert = $('#result-alert');
             if (data.error) {
                 console.log("error")
-                document.getElementById("result-alert").classList.add('alert-danger');
+                document.getElementById("result-alert").classList
+                    .add('alert-danger');
                 alert.show();
-                $('#result-text').text("Не удалось добавить кредит, попробуйте снова");
+                $('#result-text').text("Не удалось добавить кредит, " +
+                    "попробуйте снова");
             }
             else {
                 console.log("ok")
-                document.getElementById("result-alert").classList.add('alert-success');
+                document.getElementById("result-alert").classList
+                    .add('alert-success');
                 alert.show();
                 $('#result-text').text("Кредит успешно добавлен");
             }

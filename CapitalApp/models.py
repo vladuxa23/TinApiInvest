@@ -15,22 +15,26 @@ def get_currency_id(currency_dict: dict) -> int:
     """
 
     # Если нет данных о валюте в бд
-    if Currency.query.filter_by(currency=currency_dict['currency']).first() is None:
+    if Currency.query.filter_by(currency=currency_dict['currency'])\
+            .first() is None:
         # то добавляем их
         db.session.add(Currency(currency_dict['currency']))
         db.session.commit()
     # И возвращаем id
-    return Currency.query.filter_by(currency=currency_dict['currency']).first().id
+    return Currency.query.filter_by(currency=currency_dict['currency'])\
+        .first().id
 
 
 def get_instrument_type_id(instrument_dict):
-    if InstrumentInfo.query.filter_by(ticker=instrument_dict.get('ticker')).first() is None:
+    if InstrumentInfo.query.filter_by(ticker=instrument_dict.get('ticker'))\
+            .first() is None:
         # Если не существует, добавляем его
         db.session.add(InstrumentInfo(**instrument_dict))
         # Сохраняем состояние БД
         db.session.commit()
         # Возвращаем кортеж со временем добавления
-    return InstrumentInfo.query.filter_by(ticker=instrument_dict.get('ticker')).first().id
+    return InstrumentInfo.query.filter_by(ticker=instrument_dict.get('ticker'))\
+        .first().id
 
 
 class Portfolio(db.Model):
@@ -51,18 +55,19 @@ class Portfolio(db.Model):
     date = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
-        return f"Portfolio<averagePositionPriceValue={self.average_position_price_value}, " \
-               f"averagePositionPriceCurrencyID={self.average_position_price_currency_id})>"
+        return f"<instrument_id={self.id}"
 
     def __init__(self, **kwargs):
         self.balance = kwargs.get('balance')
         self.lots = kwargs.get('lots')
-
         self.expected_yield_value = kwargs.get('expectedYield').get('value')
-        self.average_position_price_value = kwargs.get('averagePositionPrice').get('value')
+        self.average_position_price_value = kwargs.get('averagePositionPrice')\
+            .get('value')
         self.instrument_id = get_instrument_type_id(kwargs)
-        self.expected_yield_currency_id = get_currency_id(kwargs.get('expectedYield'))
-        self.average_position_price_currency_id = get_currency_id(kwargs.get('averagePositionPrice'))
+        self.expected_yield_currency_id = get_currency_id(kwargs
+                                                          .get('expectedYield'))
+        self.average_position_price_currency_id = \
+            get_currency_id(kwargs.get('averagePositionPrice'))
 
 
 class Currency(db.Model):
@@ -116,7 +121,8 @@ class Credits(db.Model):
 
     def __init__(self, **kwargs):
         self.name = kwargs.get('name')
-        self.date_start = datetime.strptime(kwargs.get('date_start'), '%d.%m.%Y')
+        self.date_start = datetime.strptime(kwargs.get('date_start'),
+                                            '%d.%m.%Y')
         self.total_month = int(kwargs.get('total_month'))
         self.percent = float(kwargs.get('percent'))
         self.amount = float(kwargs.get('amount'))

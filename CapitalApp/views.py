@@ -1,15 +1,17 @@
 import json
 import os
-import traceback
 
 from flask import render_template, request, jsonify
 
 import CapitalApp.rest_wrapper
-from CapitalApp import flask_app, db
+from CapitalApp import flask_app
 from CapitalApp.forms import NewCreditForm
 from CapitalApp.handlers import *
 
-INSTRUMENT_TYPE = {"stock": "Акции", "bond": "Облигации", "etf": "Фонды", "currency": "Валюта"}
+INSTRUMENT_TYPE = {"stock": "Акции",
+                   "bond": "Облигации",
+                   "etf": "Фонды",
+                   "currency": "Валюта"}
 
 
 @flask_app.route('/')
@@ -27,17 +29,23 @@ def stock_portfolio():
     portfolio = CapitalApp.rest_wrapper.get_portfolio()
     if portfolio["status"]:
         portfolio = portfolio["resp"]["payload"]["positions"]
-        currency_price = {'USD': CapitalApp.rest_wrapper.get_last_price_by_figi('BBG0013HGFT4'),
-                          'EUR': CapitalApp.rest_wrapper.get_last_price_by_figi('BBG0013HJJ31')}
+        currency_price = {'USD': CapitalApp.rest_wrapper.get_last_price_by_figi(
+                              'BBG0013HGFT4'),
+                          'EUR': CapitalApp.rest_wrapper.get_last_price_by_figi(
+                              'BBG0013HJJ31')}
         portfolio_summary = get_summary(portfolio, currency_price)
 
         update_portfolio_data_in_db(portfolio)
 
-        return render_template('portfolio.html', title='Инвестиции',
-                               content=portfolio_summary, instrument_type=INSTRUMENT_TYPE)
+        return render_template('portfolio.html',
+                               title='Инвестиции',
+                               content=portfolio_summary,
+                               instrument_type=INSTRUMENT_TYPE)
     else:
-        return render_template('portfolio.html', title='Инвестиции',
-                               content=portfolio["resp"], instrument_type=INSTRUMENT_TYPE)
+        return render_template('portfolio.html',
+                               title='Инвестиции',
+                               content=portfolio["resp"],
+                               instrument_type=INSTRUMENT_TYPE)
 
 
 @flask_app.route('/refresh-portfolio')
@@ -47,26 +55,35 @@ def refresh_portfolio():
 
     if portfolio["status"]:
         portfolio = portfolio["resp"]["payload"]["positions"]
-        currency_price = {'USD': CapitalApp.rest_wrapper.get_last_price_by_figi('BBG0013HGFT4'),
-                          'EUR': CapitalApp.rest_wrapper.get_last_price_by_figi('BBG0013HJJ31')}
-        portfolio_summary = get_summary(portfolio, CapitalApp.rest_wrapper.get_portfolio_currency(), currency_price)
-        return json.dumps({'success': True, 'result': portfolio_summary["total_portfolio_cost"]}), 200
-        # return make_response({'success': True, 'result': portfolio_summary["total_portfolio_cost"]}, 200)
+        # currency_price = {'USD': CapitalApp.rest_wrapper.get_last_price_by_figi(
+        #                       'BBG0013HGFT4'),
+        #                   'EUR': CapitalApp.rest_wrapper.get_last_price_by_figi(
+        #                       'BBG0013HJJ31')}
+        portfolio_summary = get_summary(portfolio,
+                                        CapitalApp.rest_wrapper
+                                        .get_portfolio_currency())
+        return json.dumps({'success': True,
+                           'result': portfolio_summary["total_portfolio_cost"]}), 200
     else:
-        return render_template('portfolio.html', title='Инвестиции', content=portfolio["resp"])
+        return render_template('portfolio.html',
+                               title='Инвестиции',
+                               content=portfolio["resp"])
 
 
-@flask_app.route('/summary')
+@flask_app.route('/deposits')
 def summary_page():
-    return render_template('summary.html', title='Сводка')
+    return render_template('deposits.html', title='Сводка')
 
 
 @flask_app.route('/credits')
-def credits():
+def credits_page():
     credits_list = db.session.query(Credits).all()
 
     credit_form = NewCreditForm()
-    return render_template('credits.html', title='Кредиты', credit_form=credit_form, credits_list=credits_list)
+    return render_template('credits.html',
+                           title='Кредиты',
+                           credit_form=credit_form,
+                           credits_list=credits_list)
 
 
 @flask_app.route('/add-credit', methods=['POST'])
@@ -86,11 +103,3 @@ def add_credit():
         #  TODO: do something
         print(err)
         return jsonify({'error': err})
-
-
-
-
-
-
-
-
