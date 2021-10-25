@@ -127,3 +127,22 @@ class Credits(db.Model):
         self.percent = float(kwargs.get('percent'))
         self.amount = float(kwargs.get('amount'))
         self.amount_value = kwargs.get('amount_value')
+
+
+class Deposits(db.Model):
+    __tablename__ = 'deposits'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255))
+    date_start = db.Column(db.Date)
+    percent = db.Column(db.Float)
+    amount = db.Column(db.Float)
+    amount_value = db.Column(db.Integer, db.ForeignKey("currency.id"))
+
+    def __init__(self, **kwargs):
+        self.name = kwargs.get('name')
+        self.date_start = datetime.strptime(kwargs.get('date_start'),
+                                            '%d.%m.%Y')
+        self.percent = float(kwargs.get('percent'))
+        self.amount = float(kwargs.get('amount'))
+        self.amount_value = kwargs.get('amount_value')
+

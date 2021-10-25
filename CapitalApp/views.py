@@ -5,7 +5,7 @@ from flask import render_template, request, jsonify
 
 import CapitalApp.rest_wrapper
 from CapitalApp import flask_app
-from CapitalApp.forms import NewCreditForm
+from CapitalApp.forms import NewCreditForm, NewDepositForm
 from CapitalApp.handlers import *
 
 INSTRUMENT_TYPE = {"stock": "Акции",
@@ -71,15 +71,21 @@ def refresh_portfolio():
 
 
 @flask_app.route('/deposits')
-def summary_page():
-    return render_template('deposits.html', title='Сводка')
+def deposits_page():
+    deposits_list = db.session.query(Deposits).all()
+    deposit_form = NewDepositForm()
+
+    return render_template('deposits.html',
+                           title='Вклады',
+                           deposit_form=deposit_form,
+                           deposits_list=deposits_list)
 
 
 @flask_app.route('/credits')
 def credits_page():
     credits_list = db.session.query(Credits).all()
-
     credit_form = NewCreditForm()
+
     return render_template('credits.html',
                            title='Кредиты',
                            credit_form=credit_form,
@@ -97,6 +103,19 @@ def add_credit():
 
     try:
         db.session.add(Credits(**request.form))
+        db.session.commit()
+        return jsonify({'result': 'Ok'})
+    except Exception as err:
+        #  TODO: do something
+        print(err)
+        return jsonify({'error': err})
+
+
+@flask_app.route('/add-deposit', methods=['POST'])
+def add_deposit():
+
+    try:
+        db.session.add(Deposits(**request.form))
         db.session.commit()
         return jsonify({'result': 'Ok'})
     except Exception as err:

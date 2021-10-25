@@ -16,3 +16,15 @@ class NewCreditForm(FlaskForm):
                                                   ('EUR', 'EUR')],
                                validators=[DataRequired()])
     submit = SubmitField("")
+
+
+class NewDepositForm(FlaskForm):
+    name = StringField("Название вклада:", validators=[DataRequired()])
+    date_start = DateField("Дата начала:", validators=[DataRequired()])
+    percent = FloatField("Процент", validators=[DataRequired()])
+    amount = FloatField("Сумма вклада", validators=[DataRequired()])
+    amount_value = SelectField('Валюта', choices=[('RUB', 'RUB'),
+                                                  ('USD', 'USD'),
+                                                  ('EUR', 'EUR')],
+                               validators=[DataRequired()])
+    submit = SubmitField("")
