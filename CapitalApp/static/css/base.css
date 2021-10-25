@@ -1,3 +1,11 @@
 #main-title:hover {
 -webkit-filter: drop-shadow(0px 0px 5px rgba(255,255,255,0.8));
 }
+
+.nav-item {
+    border-bottom: 3px solid #fff3;
+}
+
+.nav-item:hover {
+  border-bottom-color: #fff9;
+}
