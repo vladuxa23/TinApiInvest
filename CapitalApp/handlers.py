@@ -103,5 +103,5 @@ def get_credit_monthly_payment(amount, percent, month):
     return amount * (month_percent/(1-pow((1+month_percent), -month)))
 
 
-if __name__ == '__main__':
-    print(get_credit_monthly_payment())
+# if __name__ == '__main__':
+#     print(get_credit_monthly_payment())

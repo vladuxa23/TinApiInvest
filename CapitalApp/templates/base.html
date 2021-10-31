@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/base.css') }}">
 
     {% block style %}{% endblock %}
 </head>
@@ -12,21 +14,30 @@
 
 <div class="container">
     <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom bg-primary">
-        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-            <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
-            <span class="fs-1"><h1 id="main-title" class="text-light">Финансист</h1></span>
+        <a href="/"
+           class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+            <svg class="bi me-2" width="40" height="32">
+                <use xlink:href="#bootstrap"></use>
+            </svg>
+            <span class="fs-1"><h1 id="main-title"
+                                   class="text-light">Финансист</h1></span>
         </a>
 
         <ul class="nav nav-pills">
-            <li class="nav-item"><a href="/" class="nav-link text-light active" aria-current="page">Главная</a></li>
-            <li class="nav-item"><a href="/deposits" class="nav-link text-light">Вклады</a></li>
-            <li class="nav-item"><a href="/credits" class="nav-link text-light">Кредиты</a></li>
-            <li class="nav-item"><a href="/stock-portfolio" class="nav-link text-light">Инвестиции</a></li>
-            <li class="nav-item"><a href="#" class="nav-link text-light">О приложении</a></li>
+            <li class="nav-item"><a href="/" class="nav-link text-light active"
+                                    aria-current="page">Главная</a></li>
+            <li class="nav-item"><a href="/deposits"
+                                    class="nav-link text-light">Вклады</a></li>
+            <li class="nav-item"><a href="/credits" class="nav-link text-light">Кредиты</a>
+            </li>
+            <li class="nav-item"><a href="/stock-portfolio"
+                                    class="nav-link text-light">Инвестиции</a>
+            </li>
+            <li class="nav-item"><a href="#" class="nav-link text-light">О
+                приложении</a></li>
         </ul>
     </header>
 </div>
-
 
 
 {% block content %}{% endblock %}
@@ -36,9 +47,8 @@
 {% block scripts %}{% endblock %}
 
 
-
-
-<footer id="sticky-footer" class="flex-shrink-0 py-4 bg-primary text-white-50 mt-5">
+<footer id="sticky-footer"
+        class="flex-shrink-0 py-4 bg-primary text-white-50 mt-5">
     <div class="container text-center">
         <small>Copyright &copy; FINANCIAL ASSISTANT</small>
     </div>

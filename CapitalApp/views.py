@@ -86,7 +86,7 @@ def credits_page():
     credits_list = db.session.query(Credits).all()
     credit_form = NewCreditForm()
 
-    return render_template('credits.html',
+    return render_template('credits1.html',
                            title='Кредиты',
                            credit_form=credit_form,
                            credits_list=credits_list)

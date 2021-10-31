@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-datepicker.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+   <h1>Ваши кредиты</h1>
+
+   <div>
+      <div class="alert" id="result-alert" role="alert" style="display: none">
+         <p id="result-text">Текст</p>
+      </div>
+
+      {% if credits_list|length == 0 %}
+      <h3>Кредиты отсутствуют</h3>
+      {% else %}
+
+      <div id="accordion mb-5 mt-5">
+         {% for elem in credits_list %}
+         <div class="card mt-2">
+            <div class="card-header" data-bs-toggle="collapse" href="#collapse{{elem.id}}">
+               <a class="btn" >
+                  {{elem.name}}
+               </a>
+            </div>
+            <div id="collapse{{elem.id}}" class="collapse" data-bs-parent="#accordion">
+               <div class="card-body">
+                  Lorem ipsum..
+               </div>
+            </div>
+         </div>
+         {% endfor %}
+      </div>
+
+      {% endif %}
+      <button type="button" class="btn btn-primary mt-5" data-bs-toggle="modal" data-bs-target="#openModal">Добавить кредит</button>
+   </div>
+
+   <!-- Modal -->
+   <div class="modal fade" id="openModal" tabindex="-1" aria-labelledby="addCreditLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+         <div class="modal-content">
+            <!-- Popup header -->
+            <div class="modal-header">
+               <h5 class="modal-title" id="addCreditLabel">Добавить кредит</h5>
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <!-- Popup body -->
+            <div class="modal-body">
+               {{credit_form.csrf_token}}
+               <form>
+                  {% for field in credit_form if field.name != 'csrf_token' %}
+
+                  <div class="mb-3">
+                     {{field.label(class="form-label", for=field.name, autocomplete="off")}}
+
+                     {% if  field.name == 'submit' %}
+                     <div class="d-grid gap-2">
+                        {{field(class="btn btn-primary", value="Добавить", autocomplete="off")}}
+                     </div>
+
+                     {% elif field.name == 'total_month'  %}
+                     {{field(class="form-control", autocomplete="off", oninput="this.value=this.value.replace(/[^0-9]/g,'');", maxlength=4)}}
+
+                     {% elif field.name == 'percent' %}
+                     {{field(class="form-control", autocomplete="off", maxlength="7", validate="true", autocomplete="off", step="0.01", type="text", pattern="(^[0-9]{0,2}$)|(^[0-9]{0,2}\.[0-9]{0,5}$)",)}}
+
+                     {% elif field.name == 'amount' %}
+                     {{field(class="form-control", validate="true", autocomplete="off", step="0.01", type="text", pattern="(^[0-9]{0,20}$)|(^[0-9]{0,2}\.[0-9]{0,5}$)",)}}
+
+                     {% elif field.name == 'amount_value'  %}
+                     {{field(class="form-select", autocomplete="off")}}
+
+                     {% else %}
+                     {{field(class="form-control", autocomplete="off", maxlength=50)}}
+
+                     {% endif %}
+
+
+                     {% for error in field.errors %}
+                     <div class="error">{{ error }}</div>
+                     {% endfor %}
+                  </div>
+
+                  {% endfor %}
+               </form>
+            </div>
+            <!-- Popup footer -->
+            <div class="modal-footer">
+               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+         </div>
+      </div>
+   </div>
+   <!-- END Modal -->
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/bootstrap-datepicker.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap-datepicker.ru.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/credits.js') }}"></script>
+{% endblock %}
+
+
+
+
