@@ -1,8 +1,23 @@
-@media only screen and (min-width: 768px){
-  .card{
-    /*width: 70%;*/
-  }
-}
 video {
-  opacity: 0.5;
+    opacity: 0.5;
+}
+
+.card-img-top{
+    max-width: 100px;
+}
+
+.form-select{
+    max-width: 200px;
+}
+
+.input-group-text{
+    border:0;
+    background:none ;
+    color: #ffffff;
+}
+
+#inputGroupSelect{
+    max-height: 40px;
+    border-radius: 40px;
+    border: 1px solid #fff;
 }

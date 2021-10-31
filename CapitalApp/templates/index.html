@@ -17,20 +17,26 @@
 
         <div class="card-img-overlay">
 
-            <div class="row m-5">
-                <div class="card col m-5">
-                    <img src="..." class="card-img-top" alt="Общая финансовая картинка">
-                    <div class="card-body">
-                        <h5 class="card-title">Сводка</h5>
-                        <p class="card-text">Расчёты сколько всего деняк</p>
+            <div class="row m-1">
+                <div class="card col m-3">
+                    <div class="row">
+                        <div class="col col-md-auto">
+                            <img src="{{ url_for('static', filename='img/summary.png') }}" class="card-img-top" alt="Общая финансовая картинка">
+                        </div>
+                        <div class="col col-lg-2">
+                            <div class="card-body">
+                                <h5 class="card-title">Сводка</h5>
+                                <p class="card-text">Расчёты сколько всего деняк</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="row m-5">
+            <div class="row m-1">
 
-                <div class="card col m-5">
-                    <img src="..." class="card-img-top" alt="Картинка с вкладом">
+                <div class="card text-center col m-3 align-items-center justify-content-center">
+                    <img src="{{ url_for('static', filename='img/deposits.png') }}" class="card-img-top w-auto" alt="Картинка с вкладом">
                     <div class="card-body">
                         <h5 class="card-title">Вклады</h5>
                         <p class="card-text">Инфа по вкладам</p>
@@ -38,8 +44,8 @@
                     </div>
                 </div>
 
-                <div class="card col m-5">
-                    <img src="..." class="card-img-top" alt="Картинка с кредитом">
+                <div class="card text-center col m-3 align-items-center justify-content-center">
+                    <img src="{{ url_for('static', filename='img/credits.png') }}" class="card-img-top w-auto" alt="Картинка с кредитом">
                     <div class="card-body">
                         <h5 class="card-title">Кредиты</h5>
                         <p class="card-text">Инфа по кредитам</p>
@@ -47,8 +53,8 @@
                     </div>
                 </div>
 
-                <div class="card col m-5">
-                    <img src="..." class="card-img-top" alt="Картинка с инвестициями">
+                <div class="card text-center col m-3 align-items-center justify-content-center">
+                    <img src="{{ url_for('static', filename='img/portfolio.png') }}" class="card-img-top w-auto" alt="Картинка с инвестициями">
                     <div class="card-body">
                         <h5 class="card-title">Инвестиции</h5>
                         <p class="card-text">Инфа по инвестициям</p>
@@ -56,6 +62,19 @@
                     </div>
                 </div>
 
+            </div>
+
+            <div class="input-group m-3">
+                <label class="input-group-text" for="inputGroupSelect">Обновлять каждые</label>
+                <select class="form-select" id="inputGroupSelect">
+                    <option selected>Выберите время</option>
+                    <option value="1">Не обновлять</option>
+                    <option value="2">15 сек.</option>
+                    <option value="3">30 сек.</option>
+                    <option value="4">1 мин.</option>
+                    <option value="5">5 мин.</option>
+                </select>
+                <span class="input-group-text input-group-lg" for="inputGroupSelect">Последнее обновление: ТУТ ВРЕМЯ</span>
             </div>
 
         </div>
