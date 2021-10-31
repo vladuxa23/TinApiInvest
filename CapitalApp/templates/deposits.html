@@ -3,103 +3,122 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block style %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-datepicker.css') }}">
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/bootstrap-datepicker.css') }}">
 {% endblock %}
 
 {% block content %}
 
 <div class="container">
-   <h1>Ваши вклады</h1>
+    <h1>Ваши вклады</h1>
 
-   <div>
-      <div class="alert" id="result-alert" role="alert" style="display: none">
-         <p id="result-text">Текст</p>
-      </div>
+    <div>
+        <div class="alert" id="result-alert" role="alert" style="display: none">
+            <p id="result-text">Текст</p>
+        </div>
 
-      {% if deposits_list|length == 0 %}
-      <h3>Вклады отсутствуют</h3>
+        {% if deposits_list|length == 0 %}
+        <h3>Вклады отсутствуют</h3>
 
-      {% else %}
+        {% else %}
 
-      <div class="accordion" id="accordionDeposits">
-         {% for elem in deposits_list %}
+        <div class="accordion" id="accordionDeposits">
+            {% for elem in deposits_list %}
 
-         <div class="accordion-item">
-            <h2 class="accordion-header" id="accordion-header-{{elem.id}}">
-               <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-header-collapse-{{elem.id}}" aria-expanded="true" aria-controls="accordion-header-collapse-{{elem.id}}">
-                  {{elem.name}}
-               </button>
-            </h2>
-            <div id="accordion-header-collapse-{{elem.id}}" class="accordion-collapse collapse" aria-labelledby="accordion-header-{{elem.id}}">
-               <div class="accordion-body">
-                  <strong>1234</strong>
-               </div>
+            <div class="card mt-2">
+                <div class="card-header" data-bs-toggle="collapse"
+                     href="#collapse{{elem.id}}">
+                    <a class="btn">
+                        {{elem.name}}
+                    </a>
+                </div>
+                <div class="collapse" data-bs-parent="#accordion"
+                     id="collapse{{elem.id}}">
+                    <div class="card-body">
+                        Lorem ipsum..
+                    </div>
+                </div>
             </div>
-         </div>
-
-         {% endfor %}
+            {% endfor %}
 
 
-      </div>
-         {% endif %}
-      <button type="button" class="btn btn-primary mt-5" data-bs-toggle="modal" data-bs-target="#openModal">Добавить вклад</button>
-   </div>
+        </div>
+        {% endif %}
+        <button type="button" class="btn btn-primary mt-5"
+                data-bs-toggle="modal" data-bs-target="#openModal">Добавить
+            вклад
+        </button>
+    </div>
 
-   <!-- Modal -->
-   <div class="modal fade" id="openModal" tabindex="-1" aria-labelledby="addDepositLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-         <div class="modal-content">
-            <!-- Popup header -->
-            <div class="modal-header">
-               <h5 class="modal-title" id="addDepositLabel">Добавить вклад</h5>
-               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <!-- Modal -->
+    <div class="modal fade" id="openModal" tabindex="-1"
+         aria-labelledby="addDepositLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <!-- Popup header -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addDepositLabel">Добавить
+                        вклад</h5>
+                    <button type="button" class="btn-close"
+                            data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <!-- Popup body -->
+                <div class="modal-body">
+                    {{deposit_form.csrf_token}}
+                    <form>
+                        {% for field in deposit_form if field.name !=
+                        'csrf_token' %}
+
+                        <div class="mb-3">
+                            {{field.label(class="form-label", for=field.name,
+                            autocomplete="off")}}
+
+                            {% if field.name == 'submit' %}
+                            <div class="d-grid gap-2">
+                                {{field(class="btn btn-primary",
+                                value="Добавить", autocomplete="off")}}
+                            </div>
+
+                            {% elif field.name == 'percent' %}
+                            {{field(class="form-control", autocomplete="off",
+                            maxlength="7", validate="true", autocomplete="off",
+                            step="0.01", type="text",
+                            pattern="(^[0-9]{0,2}$)|(^[0-9]{0,2}\.[0-9]{0,5}$)",)}}
+
+                            {% elif field.name == 'amount' %}
+                            {{field(class="form-control", validate="true",
+                            autocomplete="off", step="0.01", type="text",
+                            pattern="(^[0-9]{0,20}$)|(^[0-9]{0,2}\.[0-9]{0,5}$)",)}}
+
+                            {% elif field.name == 'amount_value' %}
+                            {{field(class="form-select", autocomplete="off")}}
+
+                            {% else %}
+                            {{field(class="form-control", autocomplete="off",
+                            maxlength=50)}}
+
+                            {% endif %}
+
+
+                            {% for error in field.errors %}
+                            <div class="error">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        {% endfor %}
+                    </form>
+                </div>
+
+                <!-- Popup footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary"
+                            data-bs-dismiss="modal">Закрыть
+                    </button>
+                </div>
             </div>
-            <!-- Popup body -->
-            <div class="modal-body">
-               {{deposit_form.csrf_token}}
-               <form>
-                  {% for field in deposit_form if field.name != 'csrf_token' %}
-
-                  <div class="mb-3">
-                     {{field.label(class="form-label", for=field.name, autocomplete="off")}}
-
-                     {% if  field.name == 'submit' %}
-                     <div class="d-grid gap-2">
-                        {{field(class="btn btn-primary", value="Добавить", autocomplete="off")}}
-                     </div>
-
-                     {% elif field.name == 'percent' %}
-                     {{field(class="form-control", autocomplete="off", maxlength="7", validate="true", autocomplete="off", step="0.01", type="text", pattern="(^[0-9]{0,2}$)|(^[0-9]{0,2}\.[0-9]{0,5}$)",)}}
-
-                     {% elif field.name == 'amount' %}
-                     {{field(class="form-control", validate="true", autocomplete="off", step="0.01", type="text", pattern="(^[0-9]{0,20}$)|(^[0-9]{0,2}\.[0-9]{0,5}$)",)}}
-
-                     {% elif field.name == 'amount_value'  %}
-                     {{field(class="form-select", autocomplete="off")}}
-
-                     {% else %}
-                     {{field(class="form-control", autocomplete="off", maxlength=50)}}
-
-                     {% endif %}
-
-
-                     {% for error in field.errors %}
-                     <div class="error">{{ error }}</div>
-                     {% endfor %}
-                  </div>
-
-                  {% endfor %}
-               </form>
-            </div>
-
-            <!-- Popup footer -->
-            <div class="modal-footer">
-               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-            </div>
-         </div>
-      </div>
-   </div>
-   <!-- END Modal -->
+        </div>
+    </div>
+    <!-- END Modal -->
 </div>
 
 {% endblock %}
