@@ -18,25 +18,30 @@
 
       {% if deposits_list|length == 0 %}
       <h3>Вклады отсутствуют</h3>
+
       {% else %}
 
-      <div id="accordion mb-5 mt-5">
+      <div class="accordion" id="accordionDeposits">
          {% for elem in deposits_list %}
-         <div class="card mt-2">
-            <div class="card-header" data-bs-toggle="collapse" href="#collapse{{elem.id}}">
-               <a class="btn" >
+
+         <div class="accordion-item">
+            <h2 class="accordion-header" id="accordion-header-{{elem.id}}">
+               <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-header-collapse-{{elem.id}}" aria-expanded="true" aria-controls="accordion-header-collapse-{{elem.id}}">
                   {{elem.name}}
-               </a>
-            </div>
-            <div id="collapse{{elem.id}}" class="collapse" data-bs-parent="#accordion">
-               <div class="card-body">
-                  Lorem ipsum..
+               </button>
+            </h2>
+            <div id="accordion-header-collapse-{{elem.id}}" class="accordion-collapse collapse" aria-labelledby="accordion-header-{{elem.id}}">
+               <div class="accordion-body">
+                  <strong>1234</strong>
                </div>
             </div>
          </div>
+
+         {% endfor %}
+
+
       </div>
-      {% endfor %}
-      {% endif %}
+         {% endif %}
       <button type="button" class="btn btn-primary mt-5" data-bs-toggle="modal" data-bs-target="#openModal">Добавить вклад</button>
    </div>
 
@@ -86,6 +91,7 @@
                   {% endfor %}
                </form>
             </div>
+
             <!-- Popup footer -->
             <div class="modal-footer">
                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>

@@ -9,3 +9,10 @@
 .nav-item:hover {
   border-bottom-color: #fff9;
 }
+
+footer {
+    position: fixed;
+    height: 100px;
+    bottom: 0;
+    width: 100%;
+}

@@ -30,9 +30,13 @@ $(document).ready(function(){
         });
         event.preventDefault();
         $('#openModal').modal('hide');
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
 
     });
 });
+
+$("#collapse [data-toggle=collapse]:last").click()
 
 $('#date_start').datepicker({
     format: "dd.mm.yyyy",
@@ -42,6 +46,7 @@ $('#date_start').datepicker({
     autoclose: true,
     todayHighlight: true
 });
+
 
 $(document).on('keydown', 'input[pattern]', function(e){
   var input = $(this);

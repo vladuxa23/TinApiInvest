@@ -31,6 +31,8 @@ $(document).ready(function(){
         });
         event.preventDefault();
         $('#openModal').modal('hide');
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
 
     });
 });
