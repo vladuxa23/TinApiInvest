@@ -26,25 +26,20 @@ def index():
 @flask_app.route('/stock-portfolio')
 def stock_portfolio():
 
-    portfolio = CapitalApp.rest_wrapper.get_portfolio()
-    if portfolio["status"]:
-        portfolio = portfolio["resp"]["payload"]["positions"]
-        currency_price = {'USD': CapitalApp.rest_wrapper.get_last_price_by_figi(
-                              'BBG0013HGFT4'),
-                          'EUR': CapitalApp.rest_wrapper.get_last_price_by_figi(
-                              'BBG0013HJJ31')}
-        portfolio_summary = get_summary(portfolio, currency_price)
+    portfolio_summary = get_summary()
 
-        update_portfolio_data_in_db(portfolio)
+    if portfolio_summary.get("total_portfolio_cost"):
 
         return render_template('portfolio.html',
                                title='Инвестиции',
                                content=portfolio_summary,
                                instrument_type=INSTRUMENT_TYPE)
+
     else:
+        # TODO Добавить html обработку ошибки
         return render_template('portfolio.html',
                                title='Инвестиции',
-                               content=portfolio["resp"],
+                               content=portfolio_summary["resp"],
                                instrument_type=INSTRUMENT_TYPE)
 
 

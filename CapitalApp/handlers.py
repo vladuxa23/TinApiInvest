@@ -1,5 +1,6 @@
 import datetime
 
+import CapitalApp
 from .models import *
 from .rest_wrapper import get_ticker_image_link_online, get_portfolio_currency
 
@@ -36,7 +37,7 @@ def update_portfolio_data_in_db(portfolio: list) -> tuple:
                  f'{datetime.utcnow().isoformat()}'
 
 
-def get_summary(portfolio: list, price_currency: dict) -> dict:
+def get_summary() -> dict:
     """
     Функция переформатирует исходный список со словарями (текущее состояние 
     портфеля) в словарь словарей для отображения на странице 
@@ -47,61 +48,73 @@ def get_summary(portfolio: list, price_currency: dict) -> dict:
     :return: dict(instrument_type:dict(name:(dict(instrument_info))))
     """
 
-    # Переменная для подсчёта общей стоимости портфеля
-    portfolio_value = 0
-    # Словарь, который будет возвращен в результате
-    portfolio_dict = dict()
+    portfolio = CapitalApp.rest_wrapper.get_portfolio()
 
-    # Перебираем инструменты в словаре и формируем значения для нового словаря
-    for tick in portfolio:
-        position_name = tick['name']
-        balance = tick['balance']
-        instrument_type = tick['instrumentType'].lower()
-        one_lot_price = tick['averagePositionPrice']['value']
-        one_lot_currency = tick['averagePositionPrice']['currency']
-        current_dynamic_price = tick['expectedYield']['value']
-        current_dynamic_currency = tick['expectedYield']['currency']
-        current_all_price = (float(balance) * float(one_lot_price) +
-                             current_dynamic_price)
-        ticker_img = get_ticker_image_link_online(tick['instrumentType'],
-                                                  tick['ticker'])
+    if portfolio["status"]:
+        portfolio = portfolio["resp"]["payload"]["positions"]
+        price_currency = {'USD': CapitalApp.rest_wrapper.get_last_price_by_figi(
+            'BBG0013HGFT4'),
+            'EUR': CapitalApp.rest_wrapper.get_last_price_by_figi(
+                'BBG0013HJJ31')}
 
-        # Если валюта не рубль, тогда умножаем полную стоимость инструмента
-        # на текущую стоимость валюты инструмента
-        if one_lot_currency != 'RUB':
-            current_all_price = (current_all_price *
-                                 price_currency[one_lot_currency])
+        # Переменная для подсчёта общей стоимости портфеля
+        portfolio_value = 0
+        # Словарь, который будет возвращен в результате
+        portfolio_dict = dict()
 
-        # Если нет основного ключа (название вида инструмента), то создаем его
-        if instrument_type not in portfolio_dict:
-            portfolio_dict.update({instrument_type: {}})
-        # Формируем возвращаемый словарь
-        portfolio_dict[instrument_type] \
-            .update({position_name: {"value": balance,
-                                     "total_cost":
-                                         round(current_all_price, 2),
-                                     "total_cost_currency":
-                                         one_lot_currency,
-                                     "current_dynamic_price":
-                                         round(current_dynamic_price, 2),
-                                     "current_dynamic_currency":
-                                         current_dynamic_currency,
-                                     "ticker_img": ticker_img}})
-        # Подсчитываем стоимость портфеля
-        portfolio_value += current_all_price
-    # Добавляем рубли из портфеля
-    portfolio_value += get_portfolio_currency()["RUB"]
-    # Обновляем словарь, добавляя в него общую стоимость портфеля
-    portfolio_dict.update({"total_portfolio_cost": round(portfolio_value, 2)})
+        update_portfolio_data_in_db(portfolio)
 
-    return portfolio_dict
+        # Перебираем инструменты в словаре и формируем значения для нового словаря
+        for tick in portfolio:
+            position_name = tick['name']
+            balance = tick['balance']
+            instrument_type = tick['instrumentType'].lower()
+            one_lot_price = tick['averagePositionPrice']['value']
+            one_lot_currency = tick['averagePositionPrice']['currency']
+            current_dynamic_price = tick['expectedYield']['value']
+            current_dynamic_currency = tick['expectedYield']['currency']
+            current_all_price = (float(balance) * float(one_lot_price) +
+                                 current_dynamic_price)
+            ticker_img = get_ticker_image_link_online(tick['instrumentType'],
+                                                      tick['ticker'])
+
+            # Если валюта не рубль, тогда умножаем полную стоимость инструмента
+            # на текущую стоимость валюты инструмента
+            if one_lot_currency != 'RUB':
+                current_all_price = (current_all_price *
+                                     price_currency[one_lot_currency])
+
+            # Если нет основного ключа (название вида инструмента), то создаем его
+            if instrument_type not in portfolio_dict:
+                portfolio_dict.update({instrument_type: {}})
+            # Формируем возвращаемый словарь
+            portfolio_dict[instrument_type] \
+                .update({position_name: {"value": balance,
+                                         "total_cost":
+                                             round(current_all_price, 2),
+                                         "total_cost_currency":
+                                             one_lot_currency,
+                                         "current_dynamic_price":
+                                             round(current_dynamic_price, 2),
+                                         "current_dynamic_currency":
+                                             current_dynamic_currency,
+                                         "ticker_img": ticker_img}})
+            # Подсчитываем стоимость портфеля
+            portfolio_value += current_all_price
+        # Добавляем рубли из портфеля
+        portfolio_value += get_portfolio_currency()["RUB"]
+        # Обновляем словарь, добавляя в него общую стоимость портфеля
+        portfolio_dict.update({"total_portfolio_cost": round(portfolio_value, 2)})
+
+        return portfolio_dict
+    else:
+        return portfolio
 
 
 def get_credit_monthly_payment(amount, percent, month):
-    month_percent = percent/(100*12)
+    month_percent = percent / (100 * 12)
 
-    return amount * (month_percent/(1-pow((1+month_percent), -month)))
-
+    return amount * (month_percent / (1 - pow((1 + month_percent), -month)))
 
 # if __name__ == '__main__':
 #     print(get_credit_monthly_payment())
