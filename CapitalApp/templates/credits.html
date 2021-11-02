@@ -32,9 +32,14 @@
                 </div>
                 <div class="collapse" data-bs-parent="#accordion"
                      id="collapse{{elem.id}}">
-                    <div class="card-body">
-                        Lorem ipsum..
-                    </div>
+                    <ul class="list-group">
+                        <li class="list-group-item">Всего: <strong>{{elem.amount}}
+                            {{elem.amount_value}}</strong></li>
+                        <li class="list-group-item">Процент: <strong>{{elem.percent}}
+                            %</strong></li>
+                        <li class="list-group-item">Начат: <strong>{{elem.date_start}}</strong>
+                        </li>
+                    </ul>
                 </div>
             </div>
             {% endfor %}

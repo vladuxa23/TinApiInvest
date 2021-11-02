@@ -20,12 +20,24 @@ def index():
         print("БД создана")
         db.create_all()
 
-    return render_template('index.html', title='Главная')
+    portfolio_summary = get_summary()  # TODO Переделать, чтобы не тягать весь портфель
+    deposits_summary = get_deposits_summary()
+    credits_summary = get_credits_summary()
+
+    if portfolio_summary.get("total_portfolio_cost"):
+
+        return render_template('index.html',
+                               title='Главная',
+                               total_portfolio_cost=portfolio_summary
+                               .get("total_portfolio_cost"),
+                               deposits_summary=deposits_summary,
+                               credits_summary=credits_summary)
+    else:
+        return render_template('index.html', title='Главная')
 
 
 @flask_app.route('/stock-portfolio')
 def stock_portfolio():
-
     portfolio_summary = get_summary()
 
     if portfolio_summary.get("total_portfolio_cost"):
@@ -45,7 +57,6 @@ def stock_portfolio():
 
 @flask_app.route('/refresh-portfolio')
 def refresh_portfolio():
-
     portfolio = CapitalApp.rest_wrapper.get_portfolio()
 
     if portfolio["status"]:
@@ -58,7 +69,8 @@ def refresh_portfolio():
                                         CapitalApp.rest_wrapper
                                         .get_portfolio_currency())
         return json.dumps({'success': True,
-                           'result': portfolio_summary["total_portfolio_cost"]}), 200
+                           'result': portfolio_summary[
+                               "total_portfolio_cost"]}), 200
     else:
         return render_template('portfolio.html',
                                title='Инвестиции',
@@ -108,7 +120,6 @@ def add_credit():
 
 @flask_app.route('/add-deposit', methods=['POST'])
 def add_deposit():
-
     try:
         db.session.add(Deposits(**request.form))
         db.session.commit()

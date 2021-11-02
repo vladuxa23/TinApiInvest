@@ -35,7 +35,20 @@
                 <div class="collapse" data-bs-parent="#accordion"
                      id="collapse{{elem.id}}">
                     <div class="card-body">
-                        Lorem ipsum..
+                        <ul class="list-group">
+                            <li class="list-group-item">Всего: <strong>{{elem.amount}}
+                                {{elem.amount_value}}</strong></li>
+                            <li class="list-group-item">Процент: <strong>{{elem.percent}}
+                                %</strong></li>
+                            <li class="list-group-item">Начат: <strong>{{elem.date_start}}</strong>
+                            </li>
+                        </ul>
+                        <button type="button"
+                                class="btn btn-primary btn-sm mt-3">Изменить
+                        </button>
+                        <button type="button"
+                                class="btn btn-danger btn-sm mt-3">Удалить
+                        </button>
                     </div>
                 </div>
             </div>

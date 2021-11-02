@@ -39,7 +39,7 @@
                     <img src="{{ url_for('static', filename='img/deposits.png') }}" class="card-img-top w-auto" alt="Картинка с вкладом">
                     <div class="card-body">
                         <h5 class="card-title">Вклады</h5>
-                        <p class="card-text">Инфа по вкладам</p>
+                        <p class="card-text">Всего: <strong style="color: #11a000">{{ deposits_summary }}</strong> руб.</p>
                         <a href="\deposits" class="btn btn-primary">Перейти</a>
                     </div>
                 </div>
@@ -48,7 +48,7 @@
                     <img src="{{ url_for('static', filename='img/credits.png') }}" class="card-img-top w-auto" alt="Картинка с кредитом">
                     <div class="card-body">
                         <h5 class="card-title">Кредиты</h5>
-                        <p class="card-text">Инфа по кредитам</p>
+                        <p class="card-text">Всего: <strong style="color: #ff3015">{{ credits_summary }}</strong> руб.</p>
                         <a href="\credits" class="btn btn-primary">Перейти</a>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
                     <img src="{{ url_for('static', filename='img/portfolio.png') }}" class="card-img-top w-auto" alt="Картинка с инвестициями">
                     <div class="card-body">
                         <h5 class="card-title">Инвестиции</h5>
-                        <p class="card-text">Инфа по инвестициям</p>
+                        <p class="card-text">Всего: <strong style="color: #11a000">{{ total_portfolio_cost }}</strong> руб.</p>
                         <a href="\stock-portfolio" class="btn btn-primary">Перейти</a>
                     </div>
                 </div>

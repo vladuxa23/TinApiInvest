@@ -46,6 +46,10 @@ $('#date_start').datepicker({
     todayHighlight: true
 });
 
+$('#openModal').on('hidden.bs.modal', function () {
+    $(this).find('form').trigger('reset');
+})
+
 $(document).on('keydown', 'input[pattern]', function(e){
   var input = $(this);
   var oldVal = input.val();

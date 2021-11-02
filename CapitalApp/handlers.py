@@ -111,6 +111,18 @@ def get_summary() -> dict:
         return portfolio
 
 
+def get_deposits_summary():
+    deposits_list = db.session.query(Deposits).all()
+    return sum([x.amount for x in deposits_list])
+
+
+def get_credits_summary():
+    credits_list = db.session.query(Credits).all()
+    return sum([x.amount for x in credits_list])
+
+
+
+
 def get_credit_monthly_payment(amount, percent, month):
     month_percent = percent / (100 * 12)
 
