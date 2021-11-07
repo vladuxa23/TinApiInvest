@@ -17,27 +17,45 @@
             <p id="result-text">Текст</p>
         </div>
 
-        {% if credits_list|length == 0 %}
+        {% if credits_data|length == 0 %}
         <h3>Кредиты отсутствуют</h3>
         {% else %}
 
         <div id="accordion mb-5 mt-5">
-            {% for elem in credits_list %}
+            {% for elem in credits_data %}
             <div class="card mt-2">
-                <div class="card-header" data-bs-toggle="collapse"
-                     href="#collapse{{elem.id}}">
+                <div class="card-header" data-bs-toggle="collapse" aria-expanded="true"
+                     href="#collapse{{credits_data.get(elem).get('id')}}">
                     <a class="btn">
-                        {{elem.name}}
+                        {{credits_data.get(elem).get("name")}}
                     </a>
                 </div>
                 <div class="collapse" data-bs-parent="#accordion"
-                     id="collapse{{elem.id}}">
+                     id="collapse{{credits_data.get(elem).get('id')}}">
                     <ul class="list-group">
-                        <li class="list-group-item">Всего: <strong>{{elem.amount}}
-                            {{elem.amount_value}}</strong></li>
-                        <li class="list-group-item">Процент: <strong>{{elem.percent}}
+                        <li class="list-group-item">Всего: <strong>{{credits_data.get(elem).get("amount")}}
+                            {{credits_data.get(elem).get("amount_value")}}</strong></li>
+                        <li class="list-group-item">Остаток: <strong>{{credits_data.get(elem).get("remain_cost")}}
+                            {{credits_data.get(elem).get("amount_value")}}</strong></li>
+                        <li class="list-group-item">Процент: <strong>{{ credits_data.get(elem).get("percent") }}
                             %</strong></li>
-                        <li class="list-group-item">Начат: <strong>{{elem.date_start}}</strong>
+                        <li class="list-group-item">Ежемесячный платёж: <strong>{{ credits_data.get(elem).get("monthly_payment") }}
+                            {{credits_data.get(elem).get("amount_value")}}</strong></li>
+                        <li class="list-group-item">Начат: <strong>{{ credits_data.get(elem).get("date_start")
+                            }}</strong>
+                        </li>
+                        <li class="list-group-item">За <strong>{{ credits_data.get(elem).get("credit_duration")
+                            }}</strong> платеж(а/ей)
+                            было выплачено <strong>{{ (credits_data.get(elem).get("total_body_pay") +
+                                credits_data.get(elem).get("total_percent_pay"))|round }}
+                                {{credits_data.get(elem).get("amount_value")}}</strong>
+                            из них:
+                            <ul>
+                            <li>ТЕЛО КРЕДИТА: <strong>{{ credits_data.get(elem).get("total_body_pay")}}
+                                {{credits_data.get(elem).get("amount_value") }}</strong></li>
+                            <li>ПЕРЕПЛАТА: <strong>{{ credits_data.get(elem).get("total_percent_pay")}}
+                                {{credits_data.get(elem).get("amount_value") }}</strong></li>
+                                </ul>
                         </li>
                     </ul>
                 </div>
@@ -47,8 +65,9 @@
         </div>
 
         {% endif %}
+        <p><small><i>*Все расчёты приведены приближенно, т.к. не учитываются досрочные погашения</i></small></p>
         <button class="btn btn-primary mt-5" data-bs-target="#openModal"
-                data-bs-toggle="modal" type="button">Добавить
+                data-bs-toggle="modal" type="button" aria-expanded="true">Добавить
             кредит
         </button>
     </div>
