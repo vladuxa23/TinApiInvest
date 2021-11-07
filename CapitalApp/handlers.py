@@ -10,6 +10,7 @@ from .rest_wrapper import get_ticker_image_link_online, get_portfolio_currency
 # todo: Ежедневная запись в БД
 # todo: Веб-приложение/ТГ-бот
 # todo: Оптимизация функций
+from .utils import DotDict
 
 
 def update_portfolio_data_in_db(portfolio: list) -> tuple:
@@ -34,7 +35,7 @@ def update_portfolio_data_in_db(portfolio: list) -> tuple:
     db.session.commit()
 
     return True, f'Данные успешно обновлены в ' \
-                 f'{datetime.utcnow().isoformat()}'
+                 f'{datetime.datetime.utcnow().isoformat()}'
 
 
 def get_summary() -> dict:
@@ -116,17 +117,56 @@ def get_deposits_summary():
     return sum([x.amount for x in deposits_list])
 
 
+def get_all_credits_info():
+    today_ = datetime.date.today()
+
+    credits_list = db.session.query(Credits).all()
+    credits_dict = {x.__dict__["name"]: x.__dict__ for x in credits_list}
+
+    for key in credits_dict:
+        credits_dict[key].update({"monthly_payment": get_credit_monthly_payment(credits_dict[key]["amount"],
+                                                                                credits_dict[key]["percent"],
+                                                                                credits_dict[key]["total_month"])})
+        credits_dict[key].update({"credit_duration": get_credit_duration(credits_dict[key]["date_start"], today_)})
+
+        remain_info = get_remain_cost(credits_dict[key]["amount"], credits_dict[key]["credit_duration"],
+                                      credits_dict[key]["percent"], credits_dict[key]["monthly_payment"])
+        credits_dict[key].update({"remain_cost": remain_info["remain_cost"],
+                                  "total_body_pay": remain_info["total_body_pay"],
+                                  "total_percent_pay": remain_info["total_percent_pay"]})
+
+    return DotDict(credits_dict)
+
 def get_credits_summary():
     credits_list = db.session.query(Credits).all()
     return sum([x.amount for x in credits_list])
 
 
-
-
-def get_credit_monthly_payment(amount, percent, month):
+def get_credit_monthly_payment(amount, percent, total_month):
     month_percent = percent / (100 * 12)
+    return round(amount * (month_percent / (1 - pow((1 + month_percent), -total_month))), 2)
 
-    return amount * (month_percent / (1 - pow((1 + month_percent), -month)))
 
-# if __name__ == '__main__':
-#     print(get_credit_monthly_payment())
+def get_credit_monthly_summary(amount, percent, monthly_payment):
+    percent_pay = (percent / 100 / 12) * amount
+
+    return {"body_pay": monthly_payment - percent_pay, "percent_pay": percent_pay}
+
+
+def get_credit_duration(date_start: datetime.date, today: datetime.date):
+    # -1 т.к. в первый месяц оплаты нет
+    return abs(today.year - date_start.year) * 12 + today.month - date_start.month - 1
+
+
+def get_remain_cost(amount, duration, percent, monthly_payment):
+    total_body_pay = 0
+    total_percent_pay = 0
+    for i in range(duration):
+        monthly_summary = get_credit_monthly_summary(amount, percent, monthly_payment)
+        amount -= monthly_summary["body_pay"]
+        total_body_pay += monthly_summary["body_pay"]
+        total_percent_pay += monthly_summary["percent_pay"]
+
+    return {"remain_cost": round(amount, 2),
+            "total_body_pay": round(total_body_pay, 2),
+            "total_percent_pay": round(total_percent_pay, 2)}

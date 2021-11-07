@@ -24,9 +24,9 @@
                             <img src="{{ url_for('static', filename='img/summary.png') }}" class="card-img-top" alt="Общая финансовая картинка">
                         </div>
                         <div class="col col-lg-2">
-                            <div class="card-body">
+                            <div class="card-body" style="min-width: 200px;">
                                 <h5 class="card-title">Сводка</h5>
-                                <p class="card-text">Расчёты сколько всего деняк</p>
+                                <p class="card-text">Всего: {{ deposits_summary - credits_summary - total_portfolio_cost }} руб.</p>
                             </div>
                         </div>
                     </div>

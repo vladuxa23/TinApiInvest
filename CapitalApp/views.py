@@ -22,7 +22,7 @@ def index():
 
     portfolio_summary = get_summary()  # TODO Переделать, чтобы не тягать весь портфель
     deposits_summary = get_deposits_summary()
-    credits_summary = get_credits_summary()
+    credits_summary = sum([x["remain_cost"] for x in get_all_credits_info().values()])
 
     if portfolio_summary.get("total_portfolio_cost"):
 
@@ -90,13 +90,15 @@ def deposits_page():
 
 @flask_app.route('/credits')
 def credits_page():
-    credits_list = db.session.query(Credits).all()
+    # get_all_credits_info()
+    credits_dict = get_all_credits_info()
+    # credits_list = db.session.query(Credits).all()
     credit_form = NewCreditForm()
 
     return render_template('credits.html',
                            title='Кредиты',
                            credit_form=credit_form,
-                           credits_list=credits_list)
+                           credits_data=credits_dict)
 
 
 @flask_app.route('/add-credit', methods=['POST'])

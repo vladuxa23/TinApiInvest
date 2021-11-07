@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 
 from CapitalApp import db
 
@@ -52,7 +52,7 @@ class Portfolio(db.Model):
     average_position_price_currency_id = db.Column(db.Integer,
                                                    db.ForeignKey("currency.id"))
 
-    date = db.Column(db.DateTime, default=datetime.utcnow)
+    date = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
     def __repr__(self):
         return f"<instrument_id={self.id}"
@@ -121,7 +121,7 @@ class Credits(db.Model):
 
     def __init__(self, **kwargs):
         self.name = kwargs.get('name')
-        self.date_start = datetime.strptime(kwargs.get('date_start'),
+        self.date_start = datetime.datetime.strptime(kwargs.get('date_start'),
                                             '%d.%m.%Y')
         self.total_month = int(kwargs.get('total_month'))
         self.percent = float(kwargs.get('percent'))
@@ -140,7 +140,7 @@ class Deposits(db.Model):
 
     def __init__(self, **kwargs):
         self.name = kwargs.get('name')
-        self.date_start = datetime.strptime(kwargs.get('date_start'),
+        self.date_start = datetime.datetime.strptime(kwargs.get('date_start'),
                                             '%d.%m.%Y')
         self.percent = float(kwargs.get('percent'))
         self.amount = float(kwargs.get('amount'))
